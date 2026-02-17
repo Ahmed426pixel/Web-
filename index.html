@@ -4827,7 +4827,15 @@
                   </div>
                   <div class="contact-details">
                       <h4>Email Us</h4>
-                      <p><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="bad3d4dcd5fac9cedfd6d6dbc8c9d1d3d6d6c994d9d5d7">[email&#160;protected]</a><br><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="7f0c0a0f0f100d0b3f0c0b1a13131e0d0c141613130c511c1012">[email&#160;protected]</a></p>
+                      <p>
+  <a href="/cdn-cgi/l/email-protection#ee87808881ae9d9a8b82828f9c9d858782829dc08d8183" style="color:#ffffff; text-decoration:none;">
+    <span class="__cf_email__" data-cfemail="9bf2f5fdf4dbe8effef7f7fae9e8f0f2f7f7e8b5f8f4f6">[email&#160;protected]</span>
+  </a><br>
+  <a href="/cdn-cgi/l/email-protection#84f7f1f4f4ebf6f0c4f7f0e1e8e8e5f6f7efede8e8f7aae7ebe9" style="color:#ffffff; text-decoration:none;">
+    <span class="__cf_email__" data-cfemail="71020401011e0305310205141d1d1003021a181d1d025f121e1c">[email&#160;protected]</span>
+  </a>
+</p>
+
                   </div>
               </div>
 
@@ -5121,7 +5129,7 @@
   </div>
 </div>
 
-<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
 
 <script>
 // Admin Credentials (Frontend Only)
@@ -5697,6 +5705,11 @@ document.querySelectorAll('.stats-container, .service-card, .timeline-item').for
        el.style.opacity = '1';
        el.style.transform = 'none';
        el.style.transition = 'all 0.6s ease';
+       // Trigger counter animation for stats-container on mobile since observer is skipped
+       if (el.classList.contains('stats-container') && !hasAnimated) {
+           hasAnimated = true;
+           setTimeout(animateStats, 300);
+       }
    } else {
        el.style.opacity = '0';
        el.style.transform = 'translateY(30px)';
@@ -6421,7 +6434,7 @@ function optimizeImages() {
 
 
 
-// Frontend-only: no database connections
+
 
 // Modal Functions
 function showSignInModal() {
