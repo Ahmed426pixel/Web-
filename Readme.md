@@ -274,10 +274,12 @@ TechnologyVersionUsageHTML5LatestSemantic structure, accessibilityCSS3LatestGrid
 📂 Project Structure
 Web-/
 │
-└── index.html        ← Complete website — 6,674 lines of HTML + CSS + JS
+└── index.html
+└── styles.css
+└── script.js
 
-The entire project — 6,674 lines — lives in a single file.
-No npm. No webpack. No framework. No build step. Pure web standards.
+The entire project — 6,674 lines — lives in a three files.
+
 
 
 🚀 Getting Started Locally
