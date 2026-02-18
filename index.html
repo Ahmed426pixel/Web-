@@ -80,14 +80,32 @@
           <li><a href="#services" class="nav-link">Services</a></li>
           <li><a href="#automation" class="nav-link">Automation</a></li>
           <li><a href="#programs" class="nav-link">Programs</a></li>
+          <li><a href="#courses" class="nav-link">Courses</a></li>
           <li><a href="#gallery" class="nav-link">Gallery</a></li>
           <li><a href="#jobs" class="nav-link">Careers</a></li>
           <li><a href="#contact" class="nav-link">Contact</a></li>
-          <li><button class="btn btn-primary" onclick="showSignInModal()">Sign In</button></li>
+          <li id="navAuthBtn"><button class="btn btn-primary nav-signin-btn" onclick="showSignInModal()">Sign In</button></li>
+          <li id="navUserInfo" style="display:none;">
+              <div class="nav-user-wrap">
+                  <div class="nav-user-avatar" id="navUserAvatar"></div>
+                  <span class="nav-user-name" id="navUserName"></span>
+                  <button class="nav-logout-btn" onclick="handleSignOut()">
+                      <i class="fas fa-sign-out-alt"></i>
+                      <span>Logout</span>
+                  </button>
+              </div>
+          </li>
       </ul>
-      <button class="mobile-menu-toggle" id="mobileMenuToggle">
-          <i class="fas fa-bars"></i>
-      </button>
+      <!-- Mobile right-side actions (shown when menu is closed) -->
+      <div class="nav-mobile-actions">
+          <div id="navMobileUserChip" class="nav-mobile-user-chip" style="display:none;">
+              <div class="nav-user-avatar-sm" id="navMobileAvatar"></div>
+          </div>
+          <button id="navMobileAuthBtn" class="btn btn-primary nav-signin-btn-sm" onclick="showSignInModal()" style="display:none;">Sign In</button>
+          <button class="mobile-menu-toggle" id="mobileMenuToggle">
+              <i class="fas fa-bars"></i>
+          </button>
+      </div>
   </div>
 </nav>
 
@@ -651,6 +669,39 @@
 
 
 
+
+
+<section id="courses" class="section courses-section">
+  <div class="container">
+      <div class="section-header" data-aos="fade-up">
+          <span class="section-badge">Enroll Now</span>
+          <h2 class="section-title">Our Robotics Courses</h2>
+          <p class="section-description">
+              Choose your path — from young learners to industry professionals
+          </p>
+      </div>
+      <div class="programs-tabs courses-tabs">
+          <button class="tab-btn active" data-course-tab="school">
+              <i class="fas fa-school"></i> School
+          </button>
+          <button class="tab-btn" data-course-tab="college">
+              <i class="fas fa-university"></i> College
+          </button>
+          <button class="tab-btn" data-course-tab="commercial">
+              <i class="fas fa-industry"></i> Commercial
+          </button>
+      </div>
+      <div id="coursesGrid" class="courses-grid" data-aos="fade-up" data-aos-delay="200">
+          <!-- Courses loaded dynamically -->
+          <div class="courses-loading">
+              <div class="loader-spinner"></div>
+              <p>Loading courses...</p>
+          </div>
+      </div>
+  </div>
+</section>
+
+
 <section id="gallery" class="gallery-section">
 <div class="container">
    <div class="section-header" data-aos="fade-up">
@@ -1019,6 +1070,9 @@
       <p style="text-align: center; margin-top: 1.5rem; color: var(--text-secondary);">
           Don't have an account? <a href="#" style="color: var(--primary-color);" onclick="showSignUpModal()">Sign Up</a>
       </p>
+      <p style="text-align: center; margin-top: 0.5rem; color: var(--text-secondary);">
+          <a href="#" style="color: var(--primary-color);" onclick="closeModal('signInModal');document.getElementById('forgotPasswordModal').classList.add('active');">Forgot Password?</a>
+      </p>
   </div>
 </div>
 
@@ -1126,6 +1180,8 @@
           <button class="admin-nav-btn" data-section="manageJobs">Manage Jobs</button>
           <button class="admin-nav-btn" data-section="applications">Applications</button>
           <button class="admin-nav-btn" data-section="users">Users</button>
+          <button class="admin-nav-btn" data-section="manageCourses">Courses</button>
+          <button class="admin-nav-btn" data-section="purchases">Purchases</button>
       </div>
 
       <div class="admin-section active" id="postJob">
@@ -1206,6 +1262,235 @@
               <!-- Users will be loaded here -->
           </div>
       </div>
+
+      <div class="admin-section" id="manageCourses">
+          <h3 style="margin-bottom: 1.5rem; color: var(--text-primary);">Add New Course</h3>
+          <form id="courseForm" style="margin-bottom: 3rem;">
+              <div class="form-row">
+                  <div class="form-group">
+                      <label for="courseTitle">Course Title *</label>
+                      <input type="text" id="courseTitle" required>
+                  </div>
+                  <div class="form-group">
+                      <label for="courseCategory">Category *</label>
+                      <select id="courseCategory" required>
+                          <option value="">Select Category</option>
+                          <option value="school">School</option>
+                          <option value="college">College</option>
+                          <option value="commercial">Commercial</option>
+                      </select>
+                  </div>
+              </div>
+              <div class="form-row">
+                  <div class="form-group">
+                      <label for="courseIdealFor">Ideal For *</label>
+                      <input type="text" id="courseIdealFor" required placeholder="e.g., Students Age 6-13">
+                  </div>
+                  <div class="form-group">
+                      <label for="coursePrice">Price (USD) *</label>
+                      <input type="number" id="coursePrice" required min="0" step="0.01">
+                  </div>
+              </div>
+              <div class="form-group">
+                  <label for="courseDescription">Description *</label>
+                  <textarea id="courseDescription" required rows="3"></textarea>
+              </div>
+              <div class="form-group">
+                  <label for="courseFeatures">Features (one per line) *</label>
+                  <textarea id="courseFeatures" required rows="5" placeholder="Feature 1&#10;Feature 2&#10;Feature 3"></textarea>
+              </div>
+              <button type="submit" class="btn btn-primary">Add Course <i class="fas fa-plus"></i></button>
+          </form>
+          <h3 style="margin-bottom: 1.5rem; color: var(--text-primary);">All Courses</h3>
+          <div id="adminCoursesList"></div>
+      </div>
+
+      <div class="admin-section" id="purchases">
+          <h3 style="margin-bottom: 2rem; color: var(--text-primary);">Course Purchases</h3>
+          <div id="purchasesList"></div>
+      </div>
+  </div>
+</div>
+
+<!-- Gallery Modal -->
+<div class="modal modal-gallery" id="galleryModal">
+  <div class="gallery-modal-content">
+      <button class="modal-close gallery-close" onclick="closeGalleryModal()">
+          <i class="fas fa-times"></i>
+      </button>
+      <div id="galleryModalContent"></div>
+  </div>
+</div>
+
+<!-- OTP Verification Modal -->
+<div class="modal" id="otpModal">
+  <div class="modal-content">
+      <button class="modal-close" onclick="closeModal('otpModal')">
+          <i class="fas fa-times"></i>
+      </button>
+      <div style="text-align:center; margin-bottom:1.5rem;">
+          <div style="width:64px;height:64px;background:var(--primary-color);border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 1rem;">
+              <i class="fas fa-envelope-open" style="font-size:1.5rem;color:white;"></i>
+          </div>
+          <h2 style="margin-bottom:0.5rem;">Verify Your Email</h2>
+          <p style="color:var(--text-secondary);font-size:0.9rem;">Enter the 6-digit code sent to <strong id="otpEmail"></strong></p>
+      </div>
+      <div class="otp-inputs" id="otpInputs">
+          <input type="text" class="otp-digit" maxlength="1" inputmode="numeric" pattern="[0-9]">
+          <input type="text" class="otp-digit" maxlength="1" inputmode="numeric" pattern="[0-9]">
+          <input type="text" class="otp-digit" maxlength="1" inputmode="numeric" pattern="[0-9]">
+          <input type="text" class="otp-digit" maxlength="1" inputmode="numeric" pattern="[0-9]">
+          <input type="text" class="otp-digit" maxlength="1" inputmode="numeric" pattern="[0-9]">
+          <input type="text" class="otp-digit" maxlength="1" inputmode="numeric" pattern="[0-9]">
+      </div>
+      <span class="error-message" id="otpError" style="display:block;text-align:center;margin-bottom:1rem;"></span>
+      <button class="btn btn-primary" style="width:100%;" id="verifyOtpBtn" onclick="submitOTP()">
+          Verify <i class="fas fa-check"></i>
+      </button>
+      <p style="text-align:center;margin-top:1rem;color:var(--text-secondary);font-size:0.875rem;">
+          Didn't receive a code? <a href="#" style="color:var(--primary-color);" onclick="resendOTP()">Resend</a>
+      </p>
+  </div>
+</div>
+
+<!-- Forgot Password Modal -->
+<div class="modal" id="forgotPasswordModal">
+  <div class="modal-content">
+      <button class="modal-close" onclick="closeModal('forgotPasswordModal')">
+          <i class="fas fa-times"></i>
+      </button>
+      <h2 style="margin-bottom:0.5rem;text-align:center;">Reset Password</h2>
+      <p style="color:var(--text-secondary);text-align:center;margin-bottom:1.5rem;font-size:0.9rem;">
+          Enter your email to receive a reset code
+      </p>
+      <div id="forgotStep1">
+          <div class="form-group">
+              <label for="forgotEmail">Email Address</label>
+              <input type="email" id="forgotEmail" placeholder="your@email.com">
+              <span class="error-message" id="forgotEmailError"></span>
+          </div>
+          <button class="btn btn-primary" style="width:100%;" id="sendResetBtn" onclick="sendResetCode()">
+              Send Reset Code <i class="fas fa-paper-plane"></i>
+          </button>
+      </div>
+      <div id="forgotStep2" style="display:none;">
+          <p style="color:var(--text-secondary);margin-bottom:1rem;font-size:0.875rem;text-align:center;">
+              Code sent to <strong id="resetEmailDisplay"></strong>
+          </p>
+          <div class="otp-inputs" id="resetOtpInputs">
+              <input type="text" class="otp-digit" maxlength="1" inputmode="numeric">
+              <input type="text" class="otp-digit" maxlength="1" inputmode="numeric">
+              <input type="text" class="otp-digit" maxlength="1" inputmode="numeric">
+              <input type="text" class="otp-digit" maxlength="1" inputmode="numeric">
+              <input type="text" class="otp-digit" maxlength="1" inputmode="numeric">
+              <input type="text" class="otp-digit" maxlength="1" inputmode="numeric">
+          </div>
+          <div class="form-group" style="margin-top:1rem;">
+              <label for="newPassword">New Password</label>
+              <input type="password" id="newPassword" placeholder="At least 8 characters">
+          </div>
+          <div class="form-group">
+              <label for="confirmNewPassword">Confirm New Password</label>
+              <input type="password" id="confirmNewPassword">
+          </div>
+          <span class="error-message" id="resetError" style="display:block;text-align:center;"></span>
+          <button class="btn btn-primary" style="width:100%;" id="resetPasswordBtn" onclick="submitResetPassword()">
+              Reset Password <i class="fas fa-key"></i>
+          </button>
+      </div>
+      <p style="text-align:center;margin-top:1rem;color:var(--text-secondary);font-size:0.875rem;">
+          <a href="#" style="color:var(--primary-color);" onclick="closeModal('forgotPasswordModal');showSignInModal();">Back to Sign In</a>
+      </p>
+  </div>
+</div>
+
+<!-- Job Application Modal -->
+<div class="modal" id="jobApplyModal">
+  <div class="modal-content">
+      <button class="modal-close" onclick="closeModal('jobApplyModal')">
+          <i class="fas fa-times"></i>
+      </button>
+      <h2 style="margin-bottom:0.5rem;text-align:center;">Apply for Job</h2>
+      <p style="color:var(--text-secondary);text-align:center;margin-bottom:1.5rem;font-size:0.9rem;" id="applyJobTitle"></p>
+      <div class="resume-upload-area" id="resumeDropZone">
+          <i class="fas fa-cloud-upload-alt" style="font-size:2.5rem;margin-bottom:1rem;color:var(--primary-color);"></i>
+          <p style="margin-bottom:0.5rem;font-weight:600;">Upload Your Resume</p>
+          <p style="color:var(--text-secondary);font-size:0.875rem;">PDF, DOC, or DOCX — Max 5MB</p>
+          <input type="file" id="resumeFile" accept=".pdf,.doc,.docx" style="display:none;" onchange="handleResumeSelect(this)">
+          <button class="btn btn-secondary" style="margin-top:1rem;" onclick="document.getElementById('resumeFile').click()">
+              Browse File
+          </button>
+      </div>
+      <div id="resumePreview" style="display:none;margin-top:1rem;padding:1rem;background:var(--bg-secondary);border-radius:10px;display:flex;align-items:center;gap:1rem;">
+          <i class="fas fa-file-alt" style="font-size:1.5rem;color:var(--primary-color);"></i>
+          <div style="flex:1;">
+              <div id="resumeFileName" style="font-weight:600;"></div>
+              <div id="resumeFileSize" style="color:var(--text-secondary);font-size:0.8rem;"></div>
+          </div>
+          <button onclick="clearResume()" style="background:none;border:none;color:var(--text-secondary);cursor:pointer;font-size:1.2rem;">
+              <i class="fas fa-times"></i>
+          </button>
+      </div>
+      <span class="error-message" id="resumeError" style="display:block;text-align:center;margin:0.5rem 0;"></span>
+      <button class="btn btn-primary" style="width:100%;margin-top:1rem;" id="submitApplicationBtn" onclick="submitJobApplication()">
+          Submit Application <i class="fas fa-paper-plane"></i>
+      </button>
+  </div>
+</div>
+
+<!-- Course Purchase Modal -->
+<div class="modal" id="purchaseModal">
+  <div class="modal-content purchase-modal-content">
+      <button class="modal-close" onclick="closeModal('purchaseModal')">
+          <i class="fas fa-times"></i>
+      </button>
+      <h2 style="margin-bottom:0.5rem;text-align:center;">Enroll in Course</h2>
+      <div id="purchaseCourseInfo" style="text-align:center;margin-bottom:1.5rem;"></div>
+
+      <div class="payment-instructions">
+          <h4 style="margin-bottom:1rem;"><i class="fas fa-info-circle"></i> Payment Instructions</h4>
+          <div class="payment-steps">
+              <div class="payment-step">
+                  <span class="step-num">1</span>
+                  <p>Transfer the course fee to our bank account:<br>
+                  <strong>Bank: HBL | Account: 1234-5678-9012 | Name: Stellar Skills Pvt Ltd</strong></p>
+              </div>
+              <div class="payment-step">
+                  <span class="step-num">2</span>
+                  <p>Take a screenshot of the payment confirmation</p>
+              </div>
+              <div class="payment-step">
+                  <span class="step-num">3</span>
+                  <p>Upload the screenshot below and submit</p>
+              </div>
+          </div>
+      </div>
+
+      <div class="resume-upload-area" id="paymentDropZone" style="margin-top:1.5rem;">
+          <i class="fas fa-receipt" style="font-size:2rem;margin-bottom:0.75rem;color:var(--primary-color);"></i>
+          <p style="font-weight:600;margin-bottom:0.25rem;">Upload Payment Screenshot</p>
+          <p style="color:var(--text-secondary);font-size:0.875rem;">PNG, JPG — Max 5MB</p>
+          <input type="file" id="paymentFile" accept="image/*" style="display:none;" onchange="handlePaymentSelect(this)">
+          <button class="btn btn-secondary" style="margin-top:0.75rem;" onclick="document.getElementById('paymentFile').click()">
+              Browse Screenshot
+          </button>
+      </div>
+      <div id="paymentPreview" style="display:none;margin-top:1rem;padding:0.75rem;background:var(--bg-secondary);border-radius:10px;">
+          <div style="display:flex;align-items:center;gap:1rem;">
+              <i class="fas fa-image" style="font-size:1.5rem;color:var(--primary-color);"></i>
+              <div style="flex:1;">
+                  <div id="paymentFileName" style="font-weight:600;font-size:0.9rem;"></div>
+              </div>
+              <button onclick="clearPayment()" style="background:none;border:none;color:var(--text-secondary);cursor:pointer;">
+                  <i class="fas fa-times"></i>
+              </button>
+          </div>
+          <img id="paymentThumb" style="width:100%;max-height:150px;object-fit:contain;border-radius:8px;margin-top:0.75rem;" alt="Payment preview">
+      </div>
+      <span class="error-message" id="purchaseError" style="display:block;text-align:center;margin:0.5rem 0;"></span>
+      <button class="btn btn-primary" style="width:100%;margin-top:1rem;" id="submitPurchaseBtn" onclick="submitCoursePurchase()">
+          Submit Purchase <i class="fas fa-check-circle"></i>
+      </button>
   </div>
 </div>
 
