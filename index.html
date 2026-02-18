@@ -1179,9 +1179,21 @@
           <button class="admin-nav-btn active" data-section="postJob">Post Job</button>
           <button class="admin-nav-btn" data-section="manageJobs">Manage Jobs</button>
           <button class="admin-nav-btn" data-section="applications">Applications</button>
+          <button class="admin-nav-btn" data-section="aiScreeningSection">
+              <i class="fas fa-robot"></i> AI Screening
+          </button>
           <button class="admin-nav-btn" data-section="users">Users</button>
           <button class="admin-nav-btn" data-section="manageCourses">Courses</button>
           <button class="admin-nav-btn" data-section="purchases">Purchases</button>
+          <button class="admin-nav-btn" data-section="analyticsSection">
+              <i class="fas fa-chart-bar"></i> Analytics
+          </button>
+          <button class="admin-nav-btn" data-section="ticketsAdminSection">
+              <i class="fas fa-ticket-alt"></i> Tickets
+          </button>
+          <button class="admin-nav-btn" data-section="campaignSection">
+              <i class="fas fa-paper-plane"></i> Campaigns
+          </button>
       </div>
 
       <div class="admin-section active" id="postJob">
@@ -1308,6 +1320,103 @@
       <div class="admin-section" id="purchases">
           <h3 style="margin-bottom: 2rem; color: var(--text-primary);">Course Purchases</h3>
           <div id="purchasesList"></div>
+      </div>
+
+      <!-- ── ANALYTICS SECTION ──────────────────────────────────────────── -->
+      <div class="admin-section" id="analyticsSection">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:2rem;flex-wrap:wrap;gap:1rem;">
+              <h3 style="color:var(--text-primary);margin:0;">📊 Analytics Dashboard</h3>
+              <button class="btn btn-primary" onclick="loadAnalytics()" style="padding:0.5rem 1rem;font-size:0.875rem;">
+                  <i class="fas fa-sync-alt"></i> Refresh
+              </button>
+          </div>
+          <div id="analyticsContent">
+              <div style="text-align:center;padding:3rem;color:var(--text-secondary);">
+                  <i class="fas fa-chart-bar" style="font-size:3rem;opacity:0.3;display:block;margin-bottom:1rem;"></i>
+                  <p>Analytics will load automatically when you open this tab.</p>
+              </div>
+          </div>
+      </div>
+
+      <!-- ── SUPPORT TICKETS SECTION ───────────────────────────────────── -->
+      <div class="admin-section" id="ticketsAdminSection">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:2rem;flex-wrap:wrap;gap:1rem;">
+              <h3 style="color:var(--text-primary);margin:0;">🎫 Support Tickets</h3>
+              <button class="btn btn-primary" onclick="loadAdminTickets()" style="padding:0.5rem 1rem;font-size:0.875rem;">
+                  <i class="fas fa-sync-alt"></i> Refresh
+              </button>
+          </div>
+          <div id="adminTicketsList">
+              <div style="text-align:center;padding:2rem;color:var(--text-secondary);">
+                  <div class="loader-spinner"></div>
+              </div>
+          </div>
+      </div>
+
+      <!-- ── AI RESUME SCREENING SECTION ──────────────────────────────── -->
+      <div class="admin-section" id="aiScreeningSection">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:2rem;flex-wrap:wrap;gap:1rem;">
+              <div>
+                  <h3 style="color:var(--text-primary);margin:0 0 0.25rem;">🤖 AI Resume Screening</h3>
+                  <p style="color:var(--text-secondary);font-size:0.875rem;margin:0;">AI-powered candidate analysis for job applications</p>
+              </div>
+              <button class="btn btn-primary" onclick="loadAIScreeningPanel()" style="padding:0.5rem 1rem;font-size:0.875rem;">
+                  <i class="fas fa-sync-alt"></i> Refresh
+              </button>
+          </div>
+          <div style="background:linear-gradient(135deg,#1a0a3e,#0d0d1a);border:1px solid #8b5cf640;border-radius:14px;padding:1.25rem;margin-bottom:1.5rem;">
+              <div style="display:flex;align-items:center;gap:0.75rem;flex-wrap:wrap;">
+                  <span style="font-size:2rem;">🤖</span>
+                  <div>
+                      <strong style="color:#8b5cf6;">Powered by Claude AI</strong>
+                      <p style="color:var(--text-secondary);font-size:0.8rem;margin:0.2rem 0 0;">Click "AI Screen" on any application below to get instant analysis: match score, strengths, gaps, and suggested interview questions.</p>
+                  </div>
+              </div>
+          </div>
+          <div id="aiScreeningList">
+              <div style="text-align:center;padding:2rem;color:var(--text-secondary);">
+                  <div class="loader-spinner"></div>
+              </div>
+          </div>
+      </div>
+
+      <!-- ── EMAIL CAMPAIGNS SECTION ───────────────────────────────────── -->
+      <div class="admin-section" id="campaignSection">
+          <h3 style="margin-bottom:2rem;color:var(--text-primary);">📧 Email Campaigns</h3>
+          <div style="max-width:600px;">
+              <div style="background:linear-gradient(135deg,var(--bg-secondary),#1a0a3e);border:1px solid #8b5cf640;border-radius:14px;padding:1.5rem;margin-bottom:1.5rem;">
+                  <h4 style="color:var(--text-primary);margin:0 0 0.5rem;">Bulk Email Sender</h4>
+                  <p style="color:var(--text-secondary);font-size:0.875rem;margin:0 0 1.25rem;">Broadcast to subscribers, verified users, or all users.</p>
+                  <div style="margin-bottom:1rem;">
+                      <label style="font-weight:600;color:var(--text-primary);display:block;margin-bottom:0.5rem;">Target Audience</label>
+                      <select id="adminCampaignTarget" class="admin-select" style="width:100%;padding:0.6rem;">
+                          <option value="newsletter">📧 Newsletter Subscribers</option>
+                          <option value="verified_users">✅ Verified Users</option>
+                          <option value="all_users">👥 All Users</option>
+                      </select>
+                  </div>
+                  <div style="margin-bottom:1rem;">
+                      <label style="font-weight:600;color:var(--text-primary);display:block;margin-bottom:0.5rem;">Subject</label>
+                      <input id="adminCampaignSubject" type="text" class="form-input" placeholder="Email subject..." style="width:100%;">
+                  </div>
+                  <div style="margin-bottom:1.25rem;">
+                      <label style="font-weight:600;color:var(--text-primary);display:block;margin-bottom:0.5rem;">Message Body</label>
+                      <textarea id="adminCampaignBody" class="form-input" rows="7" placeholder="Write your message here..." style="width:100%;resize:vertical;"></textarea>
+                  </div>
+                  <button id="sendCampaignBtn" onclick="adminSendCampaignDirect(this)" style="width:100%;padding:0.85rem;background:linear-gradient(135deg,var(--primary-color),#7c3aed);color:#fff;border:none;border-radius:10px;font-size:1rem;font-weight:700;cursor:pointer;font-family:inherit;">
+                      🚀 Launch Campaign
+                  </button>
+              </div>
+              <div style="background:var(--bg-secondary);border:1px solid var(--border-color);border-radius:14px;padding:1.5rem;">
+                  <h4 style="color:var(--text-primary);margin:0 0 1rem;">⚡ Quick Templates</h4>
+                  <div style="display:flex;flex-wrap:wrap;gap:0.5rem;">
+                      <button onclick="setCampaignTemplate('new_course')" style="padding:0.4rem 0.9rem;background:transparent;color:var(--primary-color);border:1px solid var(--primary-color);border-radius:8px;cursor:pointer;font-size:0.825rem;font-family:inherit;">📚 New Course</button>
+                      <button onclick="setCampaignTemplate('discount')" style="padding:0.4rem 0.9rem;background:transparent;color:var(--primary-color);border:1px solid var(--primary-color);border-radius:8px;cursor:pointer;font-size:0.825rem;font-family:inherit;">🎁 Special Offer</button>
+                      <button onclick="setCampaignTemplate('event')" style="padding:0.4rem 0.9rem;background:transparent;color:var(--primary-color);border:1px solid var(--primary-color);border-radius:8px;cursor:pointer;font-size:0.825rem;font-family:inherit;">📅 Event</button>
+                      <button onclick="setCampaignTemplate('update')" style="padding:0.4rem 0.9rem;background:transparent;color:var(--primary-color);border:1px solid var(--primary-color);border-radius:8px;cursor:pointer;font-size:0.825rem;font-family:inherit;">🔔 Update</button>
+                  </div>
+              </div>
+          </div>
       </div>
   </div>
 </div>
@@ -1496,5 +1605,58 @@
 
 <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
 <script src="script.js"></script>
+
+<script>
+// ── Campaign Template Helper ─────────────────────────────────────────────────
+function setCampaignTemplate(type) {
+    const templates = {
+        new_course: {
+            subject: '🚀 New Course Available at Stellar Skills!',
+            body: `We're thrilled to announce the launch of our latest course!\n\n📚 [Course Name Here]\n\nThis course covers:\n• [Feature 1]\n• [Feature 2]\n• [Feature 3]\n\nEnroll now at stellarskills.com!\n\nBest regards,\nThe Stellar Skills Team`
+        },
+        discount: {
+            subject: '🎁 Exclusive Offer — Limited Time Only!',
+            body: `As a valued member of the Stellar Skills community, we have a special gift for you!\n\n🌟 For the next 48 hours only:\n→ 30% OFF all courses\n→ Free batch enrollment with purchase\n\nUse code: STELLAR30 at checkout.\n\nWith appreciation,\nStellar Skills`
+        },
+        event: {
+            subject: '📅 You\'re Invited: Upcoming Stellar Skills Event',
+            body: `We're hosting an exciting event and YOU are invited!\n\n🎯 [Event Name]\n📅 Date: [Date & Time]\n📍 Location: [Online/Venue]\n\nWhat to expect:\n• Live demos and workshops\n• Q&A with instructors\n• Certificate of participation\n\nRegister at stellarskills.com — spots are limited!\n\nSee you there,\nStellar Skills Team`
+        },
+        update: {
+            subject: '🔔 Important Updates to Stellar Skills Platform',
+            body: `We've been working hard to improve your learning experience!\n\nHere's what's new:\n✅ [Feature 1]\n✅ [Feature 2]\n✅ [Feature 3]\n\nLog in to explore: stellarskills.com\n\nHappy learning,\nStellar Skills Team`
+        }
+    };
+    const t = templates[type];
+    if (t) {
+        document.getElementById('adminCampaignSubject').value = t.subject;
+        document.getElementById('adminCampaignBody').value = t.body;
+    }
+}
+
+async function adminSendCampaignDirect(btn) {
+    const subject = document.getElementById('adminCampaignSubject')?.value.trim();
+    const body    = document.getElementById('adminCampaignBody')?.value.trim();
+    const target  = document.getElementById('adminCampaignTarget')?.value;
+    if (!subject) { showError2('Please enter a subject'); return; }
+    if (!body)    { showError2('Please enter a message body'); return; }
+    const label = target === 'newsletter' ? 'newsletter subscribers' : target === 'verified_users' ? 'all verified users' : 'ALL users';
+    if (!confirm(`Send this campaign to ${label}? This cannot be undone.`)) return;
+    btn.disabled = true;
+    btn.innerHTML = '<span class="spinner-border"></span> Sending campaign...';
+    try {
+        const data = await api('POST', '/api/admin/send-newsletter', { subject, body, target });
+        if (data.success) {
+            showSuccess(`✅ ${data.message}`);
+            document.getElementById('adminCampaignSubject').value = '';
+            document.getElementById('adminCampaignBody').value = '';
+        } else {
+            showError2(data.message);
+        }
+    } catch(e) { showError2('Failed to send campaign'); }
+    btn.disabled = false;
+    btn.innerHTML = '🚀 Launch Campaign';
+}
+</script>
 </body>
 </html>
